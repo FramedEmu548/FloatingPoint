@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+    <title>FloatingPoint</title>
+    <!--- Link to BabylonJS --->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <!--Link to jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--BabylonJS GUI-->
+    <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <style>
+        html, body {
+            overflow: hidden;
+            width   : 100%;
+            height  : 100%;
+            margin  : 0;
+            padding : 0;
+        }
+
+        #renderCanvas {
+            width   : 100%;
+            height  : 100%;
+            touch-action: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+<script>
+    //babylon.js
+        window.addEventListener('DOMContentLoaded', function(){
+            var canvas = document.getElementById('renderCanvas');
+            //load Babylon.js
+            var engine = new BABYLON.Engine(canvas, true);
+            var createScene = function(){
+                //scene set up
+                var scene = new BABYLON.Scene(engine);
+                // Camera set up
+                var camera = new BABYLON.UniversalCamera('camera1', new BABYLON.Vector3(0, 5,-10), scene);
+                camera.setTarget(BABYLON.Vector3.Zero());
+                camera.attachControl(canvas, true);
+
+                // light set up
+                var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), scene);
+
+                //sphere creation
+                var sphere = BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene);
+                sphere.position.y = 1;
+
+                // create ground
+                var ground = BABYLON.Mesh.CreateGround('ground1', 100, 100, 100, scene);
+
+                //create gravity
+                scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
+                
+                //obsticle hitting
+                camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+                scene.collisionsEnabled = true;
+                camera.checkCollisions = true;
+                ground.checkCollisions = true;
+                sphere.checkCollisions = true;
+                camera.applyGravity = true;
+
+                  //ammo count
+                  var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+// GUI
+var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+let ammoCount = "50";
+let ammoTotal = "640";
+    var text1 = new BABYLON.GUI.TextBlock();
+    text1.text = ammoCount + " / " + ammoTotal;
+    text1.color = "black";
+    text1.fontSize = 24;
+    text1.paddingTop = 1000;
+    text1.paddingLeft = 700;
+    text1.resizeToFit = true;
+    advancedTexture.addControl(text1);    
+
+
+                // return the created scene
+                return scene;
+            }
+            var scene = createScene();
+
+            // apply constant rendering
+            engine.runRenderLoop(function(){
+                scene.render();
+            });
+
+            // the canvas/window resize event handler
+            window.addEventListener('resize', function(){
+                engine.resize();
+            });
+        });
+
+//PISTOL CONFIG
+let pistolAmmo = 25;
+
+function shootPistol() {
+    pistolAmmo--;
+}
+
+window.addEventListener("mousedown", function(evt) {
+  // left click to fire
+  if (evt.button === 0) {
+    shootPistol();
+    alert(pistolAmmo);
+  }
+});
+
+let pistol = true; 
+
+        if (pistol === true) {
+            $(document).ready(function(){
+  $("html").click(function(){
+     shootPistol();
+     alert(pistolAmmo);
+  });
+});
+
+//Pointer lock
+var canvas = document.getElementById('renderCanvas');
+canvas.requestPointerLock = canvas.requestPointerLock ||
+                            canvas.mozRequestPointerLock;
+
+document.exitPointerLock = document.exitPointerLock ||
+                           document.mozExitPointerLock;
+
+canvas.onclick = function() {
+  canvas.requestPointerLock();
+};
+document.addEventListener('pointerlockchange', lockChangeAlert, false);
+document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
+function lockChangeAlert() {
+  if (document.pointerLockElement === canvas ||
+      document.mozPointerLockElement === canvas) {
+    console.log('Your pointer is locked');
+  } else {
+    console.log('Your pointer is unlocked');  
+  }
+}
+
+}
+</script>
+</body>
+</html>
