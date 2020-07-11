@@ -1,44 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-        <meta name="description" content="FloatingPoint is a free, easy to play online first person shooter that can be played on desktop or in a browser.">
-        <meta name="keywords" content="FloatingPoint, Free, Game, Online, First person shooter, desktop and browser, Fun">
-        <meta name="author" content="Samuel Stankiewicz">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FloatingPoint | V 1.04</title>
-    <!--- Link to BabylonJS (full) --->
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
-    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
-    <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
-    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
-    <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
-    <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
-    <!--Link to jQuery-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-        html, body {
-            overflow: hidden;
-            width   : 100%;
-            height  : 100%;
-            margin  : 0;
-            padding : 0;
-        }
-
-        #renderCanvas {
-            width   : 100%;
-            height  : 100%;
-            touch-action: none;
-            z-index: -10;
-            position: inherit;
-        }
-    </style>
-</head>
-<body>
-    <canvas id="renderCanvas"></canvas>
-<script>
     //babylon.js
         window.addEventListener('DOMContentLoaded', function(){
             var canvas = document.getElementById('renderCanvas');
@@ -158,7 +117,3 @@ $document.ready(function() {
             lose1ammo();
         });
 });
-
-</script>
-</body>
-</html>
