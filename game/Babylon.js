@@ -84,14 +84,3 @@
              	window.addEventListener("resize", function () {
                 engine.resize();
         });});
-
-        function lose1ammo() {
-            ammoStatus--;
-        }
-
-        //jQuery
-$document.ready(function() {
-    $("html").click(function() {
-            lose1ammo();
-        });
-});
