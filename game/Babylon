@@ -1,1 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+        <meta name="description" content="FloatingPoint is a free, easy to play online first person shooter that can be played on desktop or in a browser.">
+        <meta name="keywords" content="FloatingPoint, Free, Game, Online, First person shooter, desktop and browser, Fun">
+        <meta name="author" content="Samuel Stankiewicz">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloatingPoint | V 1.04</title>
+    <!--- Link to BabylonJS (full) --->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+    <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+    <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+    <!--Link to jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        html, body {
+            overflow: hidden;
+            width   : 100%;
+            height  : 100%;
+            margin  : 0;
+            padding : 0;
+        }
 
+        #renderCanvas {
+            width   : 100%;
+            height  : 100%;
+            touch-action: none;
+            z-index: -10;
+            position: inherit;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+<script>
+    //babylon.js
+        window.addEventListener('DOMContentLoaded', function(){
+            var canvas = document.getElementById('renderCanvas');
+            //load Babylon.js
+            var engine = new BABYLON.Engine(canvas, true);
+
+            var createScene = function(){
+                var scene = new BABYLON.Scene(engine);
+    var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 2.5, -10), scene);
+    camera.setTarget(BABYLON.Vector3.Zero());
+    camera.attachControl(canvas, true);
+    camera.inertia = 0;
+    camera.angularSensibilityX = 9999999;
+    camera.angularSensibilityY = 9999999;
+    camera.moveSensibility = 9999999;
+
+    
+
+                // light set up
+                var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), scene);
+
+                //sphere creation
+                var sphere = BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene);
+                sphere.position.y = 1;
+                //create ground texture
+                var groundTexture = new BABYLON.StandardMaterial("groundTexture", scene);
+                groundTexture.diffuseTexture = new BABYLON.Texture("ground.jpg", scene); 
+                // create ground
+                var ground = BABYLON.Mesh.CreateGround('ground1', 150, 150, 150, scene);
+                ground.material = groundTexture;
+               
+                //create gravity
+                scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
+
+
+
+               
+
+///////
+
+                //create skybox (in progress)
+	var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1.0}, scene);
+	var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+	skyboxMaterial.backFaceCulling = false;
+	skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("skybox.zip", scene);
+	skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+	skyboxMaterial.disableLighting = true;
+	skybox.material = skyboxMaterial;		
+                
+                //obsticle hitting
+                camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+                scene.collisionsEnabled = true;
+                camera.checkCollisions = true;
+                ground.checkCollisions = true;
+                sphere.checkCollisions = true;
+                camera.applyGravity = true;
+
+                //ammo count
+                var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+                var ammoCount = new BABYLON.GUI.TextBlock();
+                ammoCount.text = ammoInClip +' / ' + totalAmmo;
+                ammoCount.color = "black";
+                ammoCount.fontSize = 50;
+                ammoCount.fontWeight = "bolder"; 
+                ammoCount.paddingLeft = 600;
+                ammoCount.resizeToFit = true;
+                ammoCount.paddingTop = 1000;
+                advancedTexture.addControl(ammoCount);
+
+                return scene;
+
+            }
+            ///////////////////////////////////////////////
+
+            let totalAmmo = 500;
+            let ammoInClip = 240;
+            var scene = createScene();
+
+            engine.runRenderLoop(function(){
+                scene.render();    
+        });
+
+              //Pointer lock
+var canvas = document.getElementById('renderCanvas');
+canvas.requestPointerLock = canvas.requestPointerLock ||
+                            canvas.mozRequestPointerLock;
+
+document.exitPointerLock = document.exitPointerLock ||
+                           document.mozExitPointerLock;
+
+canvas.onclick = function() {
+  canvas.requestPointerLock();
+};
+document.addEventListener('pointerlockchange', lockChangeAlert, false);
+document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
+function lockChangeAlert() {
+  if (document.pointerLockElement === canvas ||
+      document.mozPointerLockElement === canvas) {
+    console.log('Your pointer is locked');
+  } else {
+    console.log('Your pointer is unlocked');  
+  }
+}
+
+        window.addEventListener("resize", function () {
+                engine.resize();
+        });});
+
+        function lose1ammo() {
+            ammoStatus--;
+        }
+
+        //jQuery
+$document.ready(function() {
+    $("html").click(function() {
+            lose1ammo();
+        });
+});
+
+</script>
+</body>
+</html>
